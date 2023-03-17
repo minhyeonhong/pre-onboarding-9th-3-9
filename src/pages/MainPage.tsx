@@ -1,40 +1,65 @@
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../components/Button';
 import Chart from '../components/Chart';
 import useMockData from '../hooks/useMockData';
-import { TChart } from '../types/chartTypes';
+import { TChart, TTagBtnStates } from '../types/chartTypes';
 
 const MainPage = () => {
   const [mockData, indexesFindId, setIndexesFindId] = useMockData();
 
-  const { labels, ids, areas, bars }: TChart = mockData;
+  const { labels, ids, areas, bars, tags, tagBtnStates }: TChart = mockData;
 
-  const tags = [...new Set(ids)];
 
-  const [searchParams, setSearchParams] = useSearchParams('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  //console.log("d", searchParams.get('id') as string);
+
 
   const onClickTag = (id: string) => {
-    const findIndexes = ids
-      .map((item: string, index: number) => {
-        if (item === id) return index;
-        else return -1;
-      })
-      .filter((mapItem: number) => mapItem !== -1);
+    // const findIndexes = ids
+    //   .map((item: string, index: number) => {
+    //     return item === id ? index : -1;
+    //   })
+    //   .filter((mapItem: number) => mapItem !== -1);
 
     const all = ids.map((item: string, index: number) => {
       return index;
     });
 
-    setSearchParams({ id });
+    tagBtnStates.map(item => {
+      if (item.tag === id) item.isOn = !item.isOn;
+    });
 
-    if (id === 'all') {
-      setIndexesFindId(all);
-    } else {
+    const isOnTags = tagBtnStates
+      .filter(item => item.isOn === true)
+      .map(item => item.tag);
+
+    if (isOnTags.length !== 0) {
+      const findIndexes = ids
+        .map((item: string, index: number) => {
+          return isOnTags.includes(item) ? index : -1;
+        })
+        .filter((mapItem: number) => mapItem !== -1);
       setIndexesFindId(findIndexes);
+    } else {
+      setIndexesFindId(all);
     }
+
+    console.log(isOnTags);
+
+    setSearchParams({ id });
   };
+
+  const findTags = (tags: string[], searchParams: string) => {
+    if (tags.includes(searchParams)) {
+      return searchParams;
+    } else {
+      return 'all';
+    }
+  }
 
   return (
     <StMainWrap>
@@ -52,14 +77,22 @@ const MainPage = () => {
         <Button
           text='전체'
           onClick={() => onClickTag('all')}
-          isOn={'all' === (searchParams.get('id') || 'all')}
+          isOn={'all' === findTags(tags, searchParams.get('id') as string)}
         />
-        {tags.map(tag => (
+        {/* {tags.map(tag => (
           <Button
             key={tag}
             text={tag}
             onClick={() => onClickTag(tag)}
-            isOn={tag === searchParams.get('id')}
+            isOn={tag === findTags(tags, searchParams.get('id') as string)}
+          />
+        ))} */}
+        {tagBtnStates.map(({ tag, isOn }: TTagBtnStates) => (
+          <Button
+            key={tag}
+            text={tag}
+            onClick={() => onClickTag(tag)}
+            isOn={isOn}
           />
         ))}
       </StTagWrap>
@@ -81,7 +114,6 @@ const StMainWrap = styled.div`
 const StChartWrap = styled.div`
   width: 100%;
   height: 60%;
-  background-color: '#1111';
 `;
 
 const StTagWrap = styled.div`
