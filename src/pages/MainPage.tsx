@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Button from '../components/Button';
+import Button from '../components/ui/Button';
 import Chart from '../components/Chart';
 import useMockData from '../hooks/useMockData';
 import { TChart, TTagBtnStates } from '../types/chartTypes';
@@ -12,19 +11,9 @@ const MainPage = () => {
 
   const { labels, ids, areas, bars, tags, tagBtnStates }: TChart = mockData;
 
-
   const [searchParams, setSearchParams] = useSearchParams();
 
-  //console.log("d", searchParams.get('id') as string);
-
-
   const onClickTag = (id: string) => {
-    // const findIndexes = ids
-    //   .map((item: string, index: number) => {
-    //     return item === id ? index : -1;
-    //   })
-    //   .filter((mapItem: number) => mapItem !== -1);
-
     const all = ids.map((item: string, index: number) => {
       return index;
     });
@@ -46,20 +35,13 @@ const MainPage = () => {
       setIndexesFindId(findIndexes);
     } else {
       setIndexesFindId(all);
+      tagBtnStates.map(item => {
+        item.isOn = true;
+      });
     }
-
-    console.log(isOnTags);
 
     setSearchParams({ id });
   };
-
-  const findTags = (tags: string[], searchParams: string) => {
-    if (tags.includes(searchParams)) {
-      return searchParams;
-    } else {
-      return 'all';
-    }
-  }
 
   return (
     <StMainWrap>
@@ -74,19 +56,6 @@ const MainPage = () => {
         />
       </StChartWrap>
       <StTagWrap>
-        <Button
-          text='전체'
-          onClick={() => onClickTag('all')}
-          isOn={'all' === findTags(tags, searchParams.get('id') as string)}
-        />
-        {/* {tags.map(tag => (
-          <Button
-            key={tag}
-            text={tag}
-            onClick={() => onClickTag(tag)}
-            isOn={tag === findTags(tags, searchParams.get('id') as string)}
-          />
-        ))} */}
         {tagBtnStates.map(({ tag, isOn }: TTagBtnStates) => (
           <Button
             key={tag}

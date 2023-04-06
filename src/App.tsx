@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Footer from './components/Footer';
-import Header from './components/Header';
+import Footer from './components/ui/Footer';
+import Header from './components/ui/Header';
 
 function App() {
   return (

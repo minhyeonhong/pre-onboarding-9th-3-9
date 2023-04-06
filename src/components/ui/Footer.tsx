@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import img_github from '../assets/images/github_white.png';
+import img_github from '../../assets/images/github_white.png';
 
 const Footer = () => {
   return (
@@ -11,7 +11,7 @@ const Footer = () => {
 
       <StItemWrap>
         <StImg
-          href='https://github.com/wanted-pre-onboarding-internship-9/pre-onboarding-9th-3-9'
+          href='https://github.com/minhyeonhong/pre-onboarding-9th-3-9'
           target='_blank'>
           <img src={img_github} alt='git hub' />
         </StImg>

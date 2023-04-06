@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import instance from '../apis/instance';
 
 function useMockData() {
@@ -14,8 +13,6 @@ function useMockData() {
   });
 
   const [indexesFindId, setIndexesFindId] = useState<number[]>([]);
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     instance
@@ -56,11 +53,9 @@ function useMockData() {
             })
         });
 
-        // setSearchParams({ id: tags.join() })
-
       })
       .catch(error => {
-        console.log(error);
+        throw error;
       });
   }, []);
 
