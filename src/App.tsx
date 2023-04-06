@@ -1,17 +1,38 @@
+import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
+
+import Footer from './components/ui/Footer';
+import Header from './components/ui/Header';
 
 function App() {
   return (
-    <div>
-      <StyledBox />
-    </div>
+    <STLayoutWrap>
+      <Header />
+      <STBodyWrap>
+        <Outlet />
+      </STBodyWrap>
+      <Footer />
+    </STLayoutWrap>
   );
 }
 
 export default App;
 
-const StyledBox = styled.div`
-  width: 300px;
-  height: 300px;
-  background-color: tomato;
+const STLayoutWrap = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+`;
+const STBodyWrap = styled.div`
+  width: 100%;
+  height: 88%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
